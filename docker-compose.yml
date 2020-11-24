@@ -1,0 +1,18 @@
+version: "3.8" # Specify the version of docker-compose we will use
+
+services: # Specify our services
+  backend: # define our first service
+    build: # define the build context
+      dockerfile: ./Dockerfile # the docker file to use
+      context: . # where is the build context folder
+    image: custom_image_name:1.0.0 # in case we are building the built image name will be from the image entry
+    environment: 
+      NODE_ENV: development
+      PORT: 3000 
+    ports:
+      - 3000:3000 # host port:container port
+      - 9229:9229
+    volumes:
+        - "/app/node_modules" # save the compiled node_modules to ananymous volume so make sure we dont attach volume to our host node_modules
+        - "./:/app/" # link our project src directory to the docker src directory so any change will get updated in the running container
+    command: npm run start:debug
